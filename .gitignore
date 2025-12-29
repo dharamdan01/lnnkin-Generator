@@ -1,0 +1,16 @@
+# 1. Dependencies (Folders only)
+node_modules/
+
+# 2. Environment Variables (Security - Files)
+.env
+.env.local
+
+# 3. Logs (Wildcard to catch all log files)
+*.log
+npm-debug.log*
+
+# 4. System/Editor Files
+.vscode/
+.DS_Store
+dist/
+build/
