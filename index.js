@@ -5,10 +5,7 @@ const router = require('./routes/url');
 const {connectToMongoDB} = require('./connect');
 const URL = require('./models/url');
 const staticRouter = require('./routes/staticRouter');
-const shortid = require('shortid');
 const app = express();
-const mongoURI = process.env.MONGO_URI;
-const PORT = process.env.PORT || 8001;
 
 
 //middleware
@@ -32,8 +29,16 @@ app.get('/test', async(req, res) => {
     });
 })
 
-connectToMongoDB(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/short-url')
-.then(() => console.log("Mongodb Connected"))
+mongoose.set('bufferCommands', false);
+
+connectToMongoDB(process.env.MONGO_URI)
+.then(() => {
+    console.log("Mongodb Connected")
+    const PORT = process.env.PORT || 9000;
+    app.listen(PORT, "0.0.0.0", () => {
+        console.log(`🚀 Server running on port ${PORT}`);
+    });
+} )
 .catch((err) => console.log("Database Connection Error:", err.message))
 
 app.set('view engine', 'ejs');
@@ -64,9 +69,6 @@ app.get('/url/:shortId', async (req, res) => {
 })
 
 
-app.listen(PORT, () =>  {
-    console.log(`Server started at PORT: ${PORT}`);
-})
 
 
 // Assignment Questions
