@@ -6,7 +6,8 @@ const {connectToMongoDB} = require('./connect');
 const URL = require('./models/url');
 const staticRouter = require('./routes/staticRouter');
 const app = express();
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.PORT || 7001;
+const MONGO_URI = process.env.MONGO_URI;
 
 //middleware
 app.use(express.json());
@@ -29,9 +30,12 @@ app.get('/test', async(req, res) => {
     });
 })
 
-connectToMongoDB(process.env.MONGO_URI)
+connectToMongoDB(MONGO_URI)
 .then(() => console.log("Mongodb Connected"))
 .catch((err) => console.log("Database Connection Error:", err.message))
+app.listen(PORT, () =>  {
+    console.log(`Server started at PORT: ${PORT}`);
+})
 
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views'));
@@ -58,11 +62,6 @@ app.get('/url/:shortId', async (req, res) => {
         }
     );
     res.redirect(entry.redirectURL);
-})
-
-
-app.listen(PORT, () =>  {
-    console.log(`Server started at PORT: ${PORT}`);
 })
 
 
