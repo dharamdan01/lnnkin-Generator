@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const router = require('./routes/url');
-const {connectToMongoDB} = require('./connect');
+const mongoose = require('mongoose');
 const URL = require('./models/url');
 const staticRouter = require('./routes/staticRouter');
 const app = express();
@@ -30,7 +30,7 @@ app.get('/test', async(req, res) => {
     });
 })
 
-connectToMongoDB(MONGO_URI)
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => console.log("Mongodb Connected"))
 .catch((err) => console.log("Database Connection Error:", err.message))
 app.listen(PORT, () =>  {
